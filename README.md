@@ -35,3 +35,7 @@ The project simulates live data updates to demonstrate how modern dashboards beh
 ---
 
 ## 📁 Project Structure
+analytics-dashboard/
+├── index.html
+├── style.css
+└── app.js
