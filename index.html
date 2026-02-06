@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Analytics Dashboard</title>
+  <!-- Bootstrap 5 CDN for responsive utilities -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app">
+    <!-- Navigation/Sidebar for mobile -->
+    <nav class="mobile-nav">
+      <div class="nav-brand">
+        <i class="fas fa-chart-line"></i>
+        <span>Analytics</span>
+      </div>
+      <button class="nav-toggle" id="navToggle">
+        <i class="fas fa-bars"></i>
+      </button>
+    </nav>
+
+    <header class="top">
+      <div class="header-content">
+        <div>
+          <h1><i class="fas fa-chart-line me-2"></i>Analytics Dashboard</h1>
+          <p class="sub">Real-time business metrics & insights</p>
+        </div>
+
+        <div class="topActions">
+          <div class="dropdown-wrapper">
+            <i class="fas fa-calendar-alt dropdown-icon"></i>
+            <select id="rangeSelect" class="select">
+              <option value="7" selected>Last 7 days</option>
+              <option value="30">Last 30 days</option>
+              <option value="90">Last 90 days</option>
+            </select>
+          </div>
+
+          <div class="btn-group">
+            <button id="pauseBtn" class="ghost">
+              <i class="fas fa-pause me-1"></i>Pause Live
+            </button>
+            <button id="exportBtn" class="btn-primary">
+              <i class="fas fa-file-export me-1"></i>Export CSV
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="kpis">
+      <div class="kpi card-hover">
+        <div class="kpi-icon">
+          <i class="fas fa-dollar-sign"></i>
+        </div>
+        <div class="kpiLabel">Revenue</div>
+        <div class="kpiValue" id="kpiRevenue">—</div>
+        <div class="kpiMeta" id="kpiRevenueMeta">—</div>
+        <div class="kpi-trend"></div>
+      </div>
+      <div class="kpi card-hover">
+        <div class="kpi-icon">
+          <i class="fas fa-shopping-cart"></i>
+        </div>
+        <div class="kpiLabel">Orders</div>
+        <div class="kpiValue" id="kpiOrders">—</div>
+        <div class="kpiMeta" id="kpiOrdersMeta">—</div>
+        <div class="kpi-trend"></div>
+      </div>
+      <div class="kpi card-hover">
+        <div class="kpi-icon">
+          <i class="fas fa-percentage"></i>
+        </div>
+        <div class="kpiLabel">Conversion</div>
+        <div class="kpiValue" id="kpiConv">—</div>
+        <div class="kpiMeta" id="kpiConvMeta">—</div>
+        <div class="kpi-trend"></div>
+      </div>
+      <div class="kpi card-hover">
+        <div class="kpi-icon">
+          <i class="fas fa-chart-bar"></i>
+        </div>
+        <div class="kpiLabel">Avg Order Value</div>
+        <div class="kpiValue" id="kpiAov">—</div>
+        <div class="kpiMeta" id="kpiAovMeta">—</div>
+        <div class="kpi-trend"></div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="card card-hover">
+        <div class="cardHead">
+          <h2><i class="fas fa-trend-up me-2"></i>Revenue Trend</h2>
+          <small id="lastUpdated">—</small>
+        </div>
+        <div class="chart-container">
+          <canvas id="revChart"></canvas>
+        </div>
+      </div>
+
+      <div class="card card-hover">
+        <div class="cardHead">
+          <h2><i class="fas fa-pie-chart me-2"></i>Orders by Channel</h2>
+          <small>Web / Mobile / Store</small>
+        </div>
+        <div class="chart-container">
+          <canvas id="channelChart"></canvas>
+        </div>
+      </div>
+
+      <div class="card wide card-hover">
+        <div class="cardHead">
+          <h2><i class="fas fa-star me-2"></i>Top Products</h2>
+          <small>Real-time ranking</small>
+        </div>
+        <div class="tableWrap">
+          <table class="table-modern">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Units</th>
+                <th>Revenue</th>
+                <th>Trend</th>
+              </tr>
+            </thead>
+            <tbody id="topProducts"></tbody>
+          </table>
+        </div>
+        <div class="table-footer">
+          <small>Updated in real-time</small>
+        </div>
+      </div>
+
+      <div class="card card-hover">
+        <div class="cardHead">
+          <h2><i class="fas fa-bell me-2"></i>Realtime Events</h2>
+          <small>Latest 8 updates</small>
+        </div>
+        <div class="events-container">
+          <ul id="events" class="events"></ul>
+        </div>
+        <div class="events-footer">
+          <small><i class="fas fa-sync-alt me-1"></i>Live updates</small>
+        </div>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <div class="footer-content">
+        <small><i class="fas fa-info-circle me-1"></i>Demo dashboard • Data is simulated for portfolio</small>
+        <div class="footer-links">
+          <small><i class="fas fa-code me-1"></i>Built with HTML, CSS & JavaScript</small>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+  <!-- Optional Bootstrap JS for responsive components -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
